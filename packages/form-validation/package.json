@@ -1,0 +1,19 @@
+{
+  "name": "form-validation",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "./lib/index.d.ts",
+  "author": "Léo Le Bras <leolebras@wino.fr> (https://github.com/LeoLeBras/)",
+  "scripts": {
+    "build": "tsc --declaration",
+    "watch": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/winoteam/react-form.git"
+  },
+  "devDependencies": {
+    "typescript": "2.9.2"
+  }
+}

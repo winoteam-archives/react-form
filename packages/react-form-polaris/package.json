@@ -1,0 +1,35 @@
+{
+  "name": "react-form-polaris",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "author": "Léo Le Bras <leolebras@wino.fr> (https://github.com/LeoLeBras/)",
+  "scripts": {
+    "build": "tsc --declaration",
+    "watch": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/winoteam/react-form.git"
+  },
+  "keywords": [
+    "react",
+    "formik",
+    "web",
+    "form",
+    "polaris"
+  ],
+  "peerDependencies": {
+    "react": "*",
+    "react-dom": "*"
+  },
+  "dependencies": {
+    "@shopify/polaris": "^2.12.1",
+    "react-form-core": "^0.1.0"
+  },
+  "devDependencies": {
+    "@types/async": "^2.0.50",
+    "typescript": "2.9.2"
+  }
+}

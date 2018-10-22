@@ -1,0 +1,26 @@
+{
+  "name": "react-form",
+  "private": true,
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Léo Le Bras <leolebras@wino.fr> (https://github.com/LeoLeBras/)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/winoteam/react-form.git"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "formik",
+    "web",
+    "form",
+    "fields"
+  ],
+  "devDependencies": {
+    "typescript": "2.9.2"
+  },
+  "workspaces": [
+    "examples/*",
+    "packages/*"
+  ]
+}

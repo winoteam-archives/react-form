@@ -1,0 +1,31 @@
+{
+  "name": "polaris-typescript-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@shopify/polaris": "^2.12.1",
+    "form-validation": "^0.1.0",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "react-form-core": "^0.1.0",
+    "react-form-polaris": "^0.1.0",
+    "react-scripts-ts": "3.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject",
+    "deploy": "netlify deploy"
+  },
+  "devDependencies": {
+    "@types/async": "^2.0.50",
+    "@types/graphql": "^14.0.3",
+    "@types/isomorphic-fetch": "^0.0.34",
+    "@types/jest": "^23.3.5",
+    "@types/node": "^10.12.0",
+    "@types/react": "^16.4.18",
+    "@types/react-dom": "^16.0.9",
+    "typescript": "^3.1.3"
+  }
+}

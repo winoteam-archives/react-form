@@ -1,0 +1,35 @@
+{
+  "name": "react-form-core",
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "author": "Léo Le Bras <leolebras@wino.fr> (https://github.com/LeoLeBras/)",
+  "scripts": {
+    "build": "tsc --declaration",
+    "watch": "tsc -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/winoteam/react-form.git"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "formik",
+    "web",
+    "form",
+    "fields"
+  ],
+  "peerDependencies": {
+    "react": "*"
+  },
+  "dependencies": {
+    "formik": "^1.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^16.4.18",
+    "@types/react-dom": "^16.0.9",
+    "typescript": "2.9.2"
+  }
+}
