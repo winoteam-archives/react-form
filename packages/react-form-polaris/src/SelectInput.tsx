@@ -1,12 +1,8 @@
 import * as React from 'react'
+import { FormFieldState, FormFieldActions } from '@wino/react-form-core'
 import { Select, SelectProps } from '@shopify/polaris'
 
-type Props = SelectProps & {
-  onChange: (e: React.ChangeEvent<any>) => void
-  onBlur: (e: any) => void
-  name: string
-  value: string | number
-}
+type Props = SelectProps & FormFieldState<string | number> & FormFieldActions
 
 export type SelectInputProps = Props
 
@@ -18,10 +14,19 @@ export default class SelectInput extends React.Component<Props> {
   }
 
   shouldComponentUpdate(nextProps: Props) {
-    return this.props.value !== nextProps.value
+    return (
+      this.props.value !== nextProps.value ||
+      this.props.error !== nextProps.error
+    )
   }
 
   render() {
-    return <Select {...this.props} onChange={this.handleChange} />
+    return (
+      <Select
+        {...this.props}
+        onChange={this.handleChange}
+        error={this.props.error}
+      />
+    )
   }
 }

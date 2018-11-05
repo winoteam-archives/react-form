@@ -1,11 +1,9 @@
 import * as React from 'react'
-import { FieldBuilder } from 'react-form-core'
+import { FormField, FormFieldProps } from '@wino/react-form-core'
 import { BaseProps } from '@shopify/polaris/types/components/TextField/TextField'
 import TextInput, { TextInputProps } from './TextInput'
 
-type Props = BaseProps & {
-  name: string
-}
+type Props = BaseProps & FormFieldProps<string | number>
 
 export default class TextField extends React.Component<Props> {
   shouldComponentUpdate() {
@@ -13,14 +11,13 @@ export default class TextField extends React.Component<Props> {
   }
 
   render() {
-    const { name } = this.props
     return (
-      <FieldBuilder name={name}>
-        {({ field }) => {
+      <FormField {...this.props}>
+        {field => {
           const textInputProps = { ...this.props, ...field } as TextInputProps
           return <TextInput {...textInputProps} />
         }}
-      </FieldBuilder>
+      </FormField>
     )
   }
 }

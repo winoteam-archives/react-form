@@ -1,16 +1,16 @@
 import * as React from 'react'
 import { FormLayout } from '@shopify/polaris'
-import { FormBuilder, FormConfig } from 'react-form-core'
+import { Form, FormProps } from '@wino/react-form-core'
 
-type Props = FormConfig & {
+type Props = FormProps & {
   children: React.ReactNode
 }
 
-export default function Form(props: Props) {
+export default function FormInner(props: Props) {
   const { children, ...rest } = props
   return (
-    <FormBuilder {...rest}>
+    <Form {...rest}>
       <FormLayout>{children}</FormLayout>
-    </FormBuilder>
+    </Form>
   )
 }
