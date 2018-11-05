@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { FormField } from 'react-form-core'
+import { FormFieldState, FormFieldActions } from '@wino/react-form-core'
 import { TextField, TextFieldProps } from '@shopify/polaris'
 
-type Props = TextFieldProps & FormField<string | number>
+type Props = TextFieldProps & FormFieldState<string | number> & FormFieldActions
 
 export type TextInputProps = Props
 
@@ -21,13 +21,18 @@ export default class TextInput extends React.Component<Props> {
   }
 
   shouldComponentUpdate(nextProps: Props) {
-    return this.props.value !== nextProps.value
+    return (
+      this.props.value !== nextProps.value ||
+      this.props.error !== nextProps.error
+    )
   }
 
   render() {
+    console.log('render', this.props.name, this.props.value)
     return (
       <TextField
         {...this.props}
+        error={this.props.error}
         onChange={this.handleChange}
         onBlur={this.handleBlur}
       />
