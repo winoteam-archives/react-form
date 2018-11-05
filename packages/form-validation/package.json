@@ -1,13 +1,15 @@
 {
-  "name": "form-validation",
+  "name": "@wino/form-validation",
   "version": "0.1.0",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
   "author": "Léo Le Bras <leolebras@wino.fr> (https://github.com/LeoLeBras/)",
   "scripts": {
+    "postinstall": "yarn build",
+    "prepublish": "yarn build",
     "build": "tsc --declaration",
-    "watch": "tsc -w"
+    "watch": "tsc -w --declaration"
   },
   "repository": {
     "type": "git",
@@ -15,5 +17,9 @@
   },
   "devDependencies": {
     "typescript": "2.9.2"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   }
 }

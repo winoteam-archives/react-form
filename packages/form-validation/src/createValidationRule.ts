@@ -4,7 +4,7 @@ export default function createValidationRule(
 ) {
   return (value: any) => {
     if (rule(value)) {
-      return null
+      return undefined
     } else {
       return errorMessage
     }
