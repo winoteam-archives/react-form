@@ -28,7 +28,6 @@ export default class TextInput extends React.Component<Props> {
   }
 
   render() {
-    console.log('render', this.props.name, this.props.value)
     return (
       <TextField
         {...this.props}
