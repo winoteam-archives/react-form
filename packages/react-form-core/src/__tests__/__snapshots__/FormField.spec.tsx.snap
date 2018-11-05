@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<FormField /> handles onBlur func 1`] = `
+<div>
+  {"name":"name","value":"","touched":false}
+</div>
+`;
+
+exports[`<FormField /> handles onChange func 1`] = `
+<div>
+  {"name":"name","value":"Léo","touched":false}
+</div>
+`;
+
+exports[`<FormField /> renders correctly 1`] = `
+<div>
+  {"name":"name","value":"","touched":false}
+</div>
+`;
+
+exports[`<FormField /> renders correctly with initial value defined in field 1`] = `
+<div>
+  {"name":"name","value":"Lélé","touched":false}
+</div>
+`;
+
+exports[`<FormField /> renders correctly with initial value defined in root 1`] = `
+<div>
+  {"name":"name","value":"Lélé","touched":false}
+</div>
+`;
+
+exports[`<FormField /> renders correctly with initial value defined in root and field 1`] = `
+<div>
+  {"name":"name","value":"Léo","touched":false}
+</div>
+`;
+
+exports[`<FormField /> renders correctly with value defined 1`] = `
+<div>
+  {"name":"name","value":"Léo","touched":false}
+</div>
+`;
+
+exports[`<FormField /> renders correctly with value defined 2`] = `
+<div>
+  {"name":"name","value":"Lélé","touched":false}
+</div>
+`;
+
+exports[`<FormField /> renders correctly with value defined 3`] = `
+<div>
+  {"name":"name","value":"Léa","touched":false}
+</div>
+`;
