@@ -2,18 +2,19 @@
 
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
-**`react-form` provides tools to manage forms in React.js app. This library is based on [`formik`](https://github.com/jaredpalmer/formik/) and provides components for use with [Polaris](https://polaris.shopify.com).**
+**`react-form` provides tools to manage forms in React.js app. This library is based on [`formik`](https://github.com/jaredpalmer/formik/). It also provides ready-to-use components for use with [Polaris] UI kit(https://polaris.shopify.com).**
 
 ## 🔥 Highlights
 
 * Declarative composability
+* Blazing fast
 * Build on top of [`formik`](https://github.com/jaredpalmer/formik/)
-* Validation and error messages management
-* [Strictly-typed](https://www.typescriptlang.org/)
+* Validation and error messages management with i18n support
+* [Tested with Jest](https://jestjs.io/)
+* [Strictly-typed with Typescript](https://www.typescriptlang.org/)
 
 ## 📟  Demos
 * [Polaris typescript app](examples/polaris-typescript-app) ➡️ [See it !](https://xenodochial-hypatia-4937cc.netlify.com/)
-* [Polaris web app](examples/polaris-web-app)
 
 ## 💻  How to use
 
@@ -30,8 +31,8 @@ import { Form, TextField } from 'react-form-polaris'
 
 function App() {
   return (
-    <Form initialValues={{}} onSubmit={console.log}>
-      <TextField name="name" label="Say me name" />
+    <Form onSubmit={console.log}>
+      <TextField name="name" label="Say My Name" initialValue="Heisenberg" />
     </Form>
   )
 }
