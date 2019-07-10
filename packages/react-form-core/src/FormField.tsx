@@ -1,109 +1,162 @@
 import * as React from 'react'
-import { connect, FormikContext, FormikValues } from 'formik'
-import memoize from 'fast-memoize'
-import { REQUIRED_VALIDATION_RULE } from './constants'
-import {
-  getFormFieldValue,
-  getFormFieldInitialValue,
-  getFormFieldError,
-  getFormFieldTouched,
-  isFormFieldValueDefined,
-} from './utils'
+
+import FormContextTypes from './FormContext'
+import * as actionTypes from './actionTypes'
+import { changeFieldError } from './actionCreators'
 import {
   FormFieldState,
-  FormFieldActions,
   FormFieldProps,
   FieldError,
+  FormContext,
+  FormState,
 } from './TypeDefinitions'
+import { getFormFieldError } from './utils'
 
-type Props = FormFieldProps<any> & {
-  children?: (props: FormFieldState<any> & FormFieldActions) => React.ReactNode
+type Props<Value> = FormFieldProps<Value>
+
+type State<Value> = FormFieldState<Value>
+
+type Context<Value> = {
+  form?: FormContext<Value>
 }
 
-type Formik = FormikContext<FormikValues>
+export default class FormField<Value> extends React.Component<
+  Props<Value>,
+  State<Value>
+> {
+  static contextTypes = FormContextTypes
 
-class FormField extends React.Component<Props & { formik: Formik }> {
-  componentDidMount() {
-    const { formik, name, initialValue } = this.props
-    const { initialValues } = formik
-    const fieldInstance = { props: { validate: this.validate } }
-    formik.registerField(name, fieldInstance as any)
-    const formValue = getFormFieldValue(name, initialValues)
-    const value = getFormFieldInitialValue(name, initialValues, initialValue)
-    if (formValue !== value) {
-      const event = { target: { name, value } } as React.ChangeEvent<any>
-      formik.handleChange(event)
+  constructor(props: Props<Value>, context: Context<Value>) {
+    super(props, context)
+    const { initialValue } = props
+    this.state = {
+      value: initialValue,
+      error: undefined,
+      isFocused: false,
+      isFocusing: false,
     }
   }
 
-  componentDidUpdate(prevProps: Props & { formik: Formik }) {
-    const { name, formik } = this.props
+  componentDidMount() {
+    this.onInitialize()
+  }
+
+  componentDidUpdate(prevProps: Props<Value>) {
+    const { name } = this.props
     if (prevProps.name !== name) {
-      formik.unregisterField(prevProps.name)
-      const fieldInstance = { props: { validate: this.validate } }
-      formik.registerField(name, fieldInstance as any)
-    }
-    if (prevProps.value !== this.props.value) {
-      const values: { [key: string]: any } = formik.values
-      if (values[name] !== this.props.value) {
-        formik.setFieldValue(name, this.props.value)
-      }
+      this.onTeardown(prevProps.name)
+      this.onInitialize()
     }
   }
 
   componentWillUnmount() {
-    const { formik, name } = this.props
-    formik.unregisterField(name)
+    const context = this.context as Context<Value>
+    const { form } = context
+    if (form) {
+      form.unsubscribe(this.onSubscribeFormChanges)
+    }
   }
 
-  validate = memoize((value: any) => {
+  handleValidate = (value: Value) => {
     const { validation } = this.props
-    if (validation) {
-      if (value !== null && value !== undefined) {
-        let response: FieldError = undefined
-        for (let key of Object.keys(validation)) {
-          if (
-            key === REQUIRED_VALIDATION_RULE ||
-            (key !== REQUIRED_VALIDATION_RULE && isFormFieldValueDefined(value))
-          ) {
-            const rule = validation[key]
-            response = rule(value)
-            if (response) {
-              break
-            }
-          }
+    let error: FieldError = getFormFieldError(value, validation)
+    if (this.state.error !== error) {
+      this.setState({ error }, () => {
+        const { name } = this.props
+        const { form } = this.context
+        if (form) {
+          form.dispatch(changeFieldError(name, error))
         }
-        return response
+      })
+    }
+  }
+
+  onInitialize = () => {
+    const { form } = this.context
+    if (form) {
+      const action = {
+        type: actionTypes.INITIALIZE_FIELD,
+        payload: { name },
+      }
+      form.dispatch(action)
+    }
+  }
+
+  onTeardown = (name: string) => {
+    const { form } = this.context
+    if (form) {
+      const action = {
+        type: actionTypes.TEARDOWN_FIELD,
+        payload: { name },
+      }
+      form.dispatch(action)
+    }
+  }
+
+  onChangeValue = (value: Value) => {
+    this.handleValidate(value)
+    this.setState({ value }, () => {
+      const { name } = this.props
+      const { form } = this.context
+      if (form) {
+        const action = {
+          type: actionTypes.CHANGE_FIELD_VALUE,
+          payload: { name, value },
+        }
+        form.dispatch(action)
+      }
+    })
+  }
+
+  onFocus = () => {
+    this.setState({ isFocusing: true }, () => {
+      const { name } = this.props
+      const { form } = this.context
+      if (form) {
+        const action = {
+          type: actionTypes.FOCUS_FIELD,
+          payload: { name },
+        }
+        form.dispatch(action)
+      }
+    })
+  }
+
+  onBlur = () => {
+    this.setState({ isFocusing: false, isFocused: true }, () => {
+      const { name } = this.props
+      const { form } = this.context
+      if (form) {
+        const action = {
+          type: actionTypes.BLUR_FIELD,
+          payload: { name },
+        }
+        form.dispatch(action)
+      }
+    })
+  }
+
+  onSubscribeFormChanges = (
+    oldFormState: FormState<Value>,
+    newFormState: FormState<Value>,
+  ) => {
+    if (oldFormState.id !== newFormState.id) {
+      const { initialValue } = this.props
+      if (initialValue !== undefined) {
+        this.onChangeValue(initialValue)
       }
     }
-    return null
-  })
-
-  shouldComponentUpdate(nextProps: Props & { formik: Formik }) {
-    const { formik } = this.props
-    const { name, formik: nextFormik } = nextProps
-    const value = getFormFieldValue(name, this.props.formik.values)
-    const nextValue = getFormFieldValue(name, nextFormik.values)
-    const error = getFormFieldError(name, this.props.formik.errors, formik)
-    const nextError = getFormFieldError(name, nextFormik.errors, nextFormik)
-    return (
-      this.props.value !== nextProps.value ||
-      value !== nextValue ||
-      error !== nextError
-    )
   }
 
   render() {
-    const { formik, name, children } = this.props
+    const { children } = this.props
     if (!children) return null
-    const onChange = formik.handleChange
-    const onBlur = formik.handleBlur
-    const value = getFormFieldValue(name, formik.values)
-    const error = getFormFieldError(name, formik.errors, formik)
-    const touched = getFormFieldTouched(name, formik.touched)
-    const field = { name, value, error, touched, onChange, onBlur }
+    const field = {
+      ...this.state,
+      onChange: this.onChangeValue,
+      onFocus: this.onFocus,
+      onBlur: this.onBlur,
+    }
     return children(field)
   }
 }
-
-export default connect<Props>(FormField)

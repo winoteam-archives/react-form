@@ -1,28 +1,59 @@
 import * as React from 'react'
-import { connect, FormikContext, FormikValues } from 'formik'
-import {
-  FormValues,
-  FormSubmitState,
-  FormSubmitActions,
-} from './TypeDefinitions'
+import invariant from 'invariant'
 
-type Formik = FormikContext<FormikValues>
+import FormContextTypes from './FormContext'
+import { FormState, FormContext } from './TypeDefinitions'
 
 type Props = {
-  children: (formSubmit: FormSubmitState & FormSubmitActions) => React.ReactNode
+  children: () => React.ReactNode
 }
 
-class FormSubmit extends React.Component<Props & { formik: Formik }> {
-  shouldComponentUpdate() {
-    return false
+type State<Values> = FormState<Values>
+
+type Context<Values> = { form?: FormContext<Values> }
+
+export default class FormSubmit<Values> extends React.Component<
+  Props,
+  State<Values>
+> {
+  static contextTypes = FormContextTypes
+
+  constructor(props: Props, context: Context<Values>) {
+    super(props, context)
+    invariant(
+      context.form,
+      'The context `form` is marked as required in `FormSubmit`, but its value is `undefined` in `FormSubmit`',
+    )
+    const form = context.form as FormContext<Values>
+    this.state = form.getState()
+  }
+
+  componentDidMount() {
+    invariant(
+      this.context.form,
+      'The context `form` is marked as required in `FormSubmit`, but its value is `undefined` in `FormSubmit`',
+    )
+    const form = this.context.form as FormContext<Values>
+    form.subscribe(this.onSubscribeFormChanges)
+  }
+
+  componentWillUnmount() {
+    invariant(
+      this.context.form,
+      'The context `form` is marked as required in `FormSubmit`, but its value is `undefined` in `FormSubmit`',
+    )
+    const form = this.context.form as FormContext<Values>
+    form.unsubscribe(this.onSubscribeFormChanges)
+  }
+
+  onSubscribeFormChanges = (formState: FormState<Values>) => {
+    this.setState(formState)
   }
 
   render() {
-    const { children, formik } = this.props
-    const handleSubmit = formik.handleSubmit as (values: FormValues) => void
-    const formSubmit = { handleSubmit, disabled: true }
-    return children(formSubmit)
+    const { children } = this.props
+    const { form } = this.context
+    if (!form) return null
+    return children()
   }
 }
-
-export default connect<Props>(FormSubmit)

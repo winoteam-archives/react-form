@@ -19,7 +19,6 @@
   "keywords": [
     "react",
     "react-native",
-    "formik",
     "web",
     "form",
     "fields"
@@ -28,19 +27,17 @@
     "react": "*"
   },
   "dependencies": {
-    "fast-memoize": "^2.5.1",
-    "fbjs": "^1.0.0",
-    "formik": "^1.3.1"
+    "fbjs": "^1.0.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.9",
-    "@types/react": "^16.4.18",
-    "@types/react-dom": "^16.0.9",
-    "@types/react-test-renderer": "^16.0.3",
+    "@types/react": "16.8.7",
+    "@types/react-dom": "16.8.2",
+    "@types/react-test-renderer": "^16.6.0",
     "jest": "^23.6.0",
     "react-test-renderer": "^16.6.0",
     "ts-jest": "^23.10.4",
-    "typescript": "2.9.2"
+    "typescript": "^3.2.4"
   },
   "jest": {
     "preset": "ts-jest",

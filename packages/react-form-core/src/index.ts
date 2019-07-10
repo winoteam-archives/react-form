@@ -8,10 +8,9 @@ export { default as FormConsumer } from './FormConsumer'
 
 // Type definitions
 export {
+  FormState,
   FormProps,
   FormFieldProps,
   FormFieldState,
-  FormFieldActions,
-  FormSubmitState,
-  FormSubmitActions,
+  FormFieldHandlers,
 } from './TypeDefinitions'

@@ -1,11 +1,17 @@
-import {
-  FormValues,
-  FormErrors,
-  FormTouched,
-  FormState,
-} from './TypeDefinitions'
+import { REQUIRED_VALIDATION_RULE } from './constants'
 
-export function getFormFieldValue(name: string, values: FormValues) {
+export function isFormFieldValueDefined(value: any) {
+  return (
+    value !== undefined &&
+    value !== null &&
+    (typeof value !== 'string' || value.length === 0)
+  )
+}
+
+export function getFormFieldValue<FormValues>(
+  name: string,
+  values: FormValues,
+) {
   const value = values[name]
   if (!isFormFieldValueDefined(value)) {
     return undefined
@@ -13,44 +19,21 @@ export function getFormFieldValue(name: string, values: FormValues) {
   return value
 }
 
-export function getFormFieldInitialValue(
-  name: string,
-  initialValues: FormValues,
-  initialValue?: any,
-) {
-  return getFormFieldValue(name, initialValues) || initialValue || ''
-}
-
-export function getFormFieldError(
-  name: string,
-  errors: FormErrors<FormValues>,
-  formState?: FormState<FormValues>,
-) {
-  const error = errors[name]
-  if (error && typeof error === 'string') {
-    if (formState) {
-      return error
-    } else {
-      return error
+export function getFormFieldError(value: any, validation) {
+  let error = undefined
+  if (validation) {
+    for (let key in validation) {
+      if (
+        key === REQUIRED_VALIDATION_RULE ||
+        (key !== REQUIRED_VALIDATION_RULE && isFormFieldValueDefined(value))
+      ) {
+        const rule = validation[key]
+        error = rule(value)
+        if (error) {
+          break
+        }
+      }
     }
   }
-  return undefined
-}
-
-export function getFormFieldTouched(
-  name: string,
-  touched: FormTouched<FormValues>,
-) {
-  return !!touched[name]
-}
-
-export function isFormFieldValueDefined(value: any) {
-  if (
-    value === undefined ||
-    value === null ||
-    (typeof value === 'string' && value.length === 0)
-  ) {
-    return false
-  }
-  return true
+  return error
 }

@@ -1,41 +1,59 @@
 import * as React from 'react'
-import { connect, FormikContext, FormikValues } from 'formik'
-import shallowEqual from 'fbjs/lib/shallowEqual'
-import { FormState, FormValues } from './TypeDefinitions'
+import invariant from 'invariant'
 
-type Formik = FormikContext<FormikValues>
+import FormContextTypes from './FormContext'
+import { FormState, FormContext } from './TypeDefinitions'
 
-type Props = {
-  children: (formState: FormState<FormValues>) => React.ReactNode
+type Props<Values> = {
+  children: (formState: FormState<Values>) => React.ReactNode
 }
 
-class FormConsumer extends React.Component<Props & { formik: Formik }> {
-  shouldComponentUpdate(nextProps: { formik: Formik }) {
-    const { formik } = this.props
-    const { formik: nextFormik } = nextProps
-    return (
-      !shallowEqual(formik.values, nextFormik.values) ||
-      !shallowEqual(formik.errors, nextFormik.errors) ||
-      !shallowEqual(formik.touched, nextFormik.touched) ||
-      formik.isSubmitting !== nextFormik.isSubmitting ||
-      formik.submitCount !== nextFormik.submitCount
+type State<Values> = FormState<Values>
+
+type Context<Values> = { form?: FormContext<Values> }
+
+export default class FormConsumer<Values> extends React.Component<
+  Props<Values>,
+  State<Values>
+> {
+  static contextTypes = FormContextTypes
+
+  constructor(props: Props<Values>, context: Context<Values>) {
+    super(props, context)
+    invariant(
+      context.form,
+      'The context `form` is marked as required in `FormConsumer`, but its value is `undefined` in `FormConsumer`',
     )
+    const form = context.form as FormContext<Values>
+    this.state = form.getState()
+  }
+
+  componentDidMount() {
+    invariant(
+      this.context.form,
+      'The context `form` is marked as required in `FormConsumer`, but its value is `undefined` in `FormConsumer`',
+    )
+    const form = this.context.form as FormContext<Values>
+    form.subscribe(this.onSubscribeFormChanges)
+  }
+
+  componentWillUnmount() {
+    invariant(
+      this.context.form,
+      'The context `form` is marked as required in `FormConsumer`, but its value is `undefined` in `FormConsumer`',
+    )
+    const form = this.context.form as FormContext<Values>
+    form.unsubscribe(this.onSubscribeFormChanges)
+  }
+
+  onSubscribeFormChanges = (formState: FormState<Values>) => {
+    this.setState(formState)
   }
 
   render() {
-    const { children, formik } = this.props
-    if (!formik) return null
-    const { errors, touched, isSubmitting, submitCount } = formik
-    const values = formik.values as FormValues
-    const formState = {
-      values,
-      errors,
-      touched,
-      isSubmitting,
-      submitCount,
-    }
-    return children(formState)
+    const { children } = this.props
+    const { form } = this.context
+    if (!form) return null
+    return children(this.state)
   }
 }
-
-export default connect<Props>(FormConsumer)

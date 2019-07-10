@@ -1,42 +1,60 @@
-export type FormProps = {
-  id?: string
-  initialValues?: { [name: string]: any }
-  onSubmit: (values: FormValues) => any
-}
+import * as React from 'react'
 
-export type FormValues = {
-  [name: string]: any
+export type FormProps<Values> = {
+  id?: string
+  initialValues?: Values
+  onReset?: () => void
+  onSubmit: (values: Values) => any
+  children: React.ReactNode
 }
 
 export type FieldError = string | undefined
 
-export type FormErrors<Values> = {
-  [K in keyof Values]?: Values[K] extends object
-    ? FormErrors<Values[K]>
-    : FieldError
-}
+export type FormErrors<Values> = { [K in keyof Values]?: FieldError }
 
-export type FormTouched<Values> = {
-  [K in keyof Values]?: Values[K] extends object
-    ? FormTouched<Values[K]>
-    : boolean
-}
+export type FormFocused<Values> = { [K in keyof Values]?: boolean }
+
+export type FormFocusing<Values> = { [K in keyof Values]?: boolean }
+
+export type FormRefs<Values> = { [K in keyof Values]?: React.ReactNode }
+
+export type FormIndexes<Values> = { [K in keyof Values]?: number }
 
 export type FormState<Values> = {
+  id: string | undefined
+  initialValues: Values
   values: Values
   errors: FormErrors<Values>
-  touched: FormTouched<Values>
-  isSubmitting: boolean
+  focused: FormFocused<Values>
+  focusing: FormFocusing<Values>
+  refs: FormRefs<Values>
+  indexes: FormIndexes<Values>
   submitCount: number
+  isSubmitting: boolean
+  isKilled: boolean
+  isProcessing: boolean
 }
 
-export type FormActionsProps = {
+export type FormHandlerMethods = {
   handleReset: () => void
-  handleSubmit: (e?: React.FormEvent<HTMLFormElement>) => void
+  handleSubmit: () => void
 }
 
 export type FormFieldValidation<Value> = {
   [ruleName: string]: (value: Value, extra?: Object) => FieldError
+}
+
+export type FormFieldState<Value> = {
+  value: Value | undefined
+  error?: string
+  isFocused: boolean
+  isFocusing: boolean
+}
+
+export type FormFieldHandlers<Value> = {
+  onChange: (value: Value) => void
+  onFocus: () => void
+  onBlur: () => void
 }
 
 export type FormFieldProps<Value> = {
@@ -44,24 +62,25 @@ export type FormFieldProps<Value> = {
   initialValue?: Value
   value?: Value
   validation?: FormFieldValidation<Value>
+  children?: (
+    props: FormFieldState<Value> & FormFieldHandlers<Value>,
+  ) => React.ReactNode
 }
 
-export type FormFieldState<Value> = {
-  name: string
-  value: Value
-  error?: string
-  touched: boolean
+export type FormAction = {
+  type: string
+  payload: { [key: string]: any }
 }
 
-export type FormFieldActions = {
-  onChange: (e: React.ChangeEvent<any>) => void
-  onBlur: (e: any) => void
+export type FormContext<Values> = {
+  subscribe: (fn: Function) => void
+  unsubscribe: (fn: Function) => void
+  getState: () => FormState<Values>
+  dispatch: (action: FormAction) => void
+  reset: () => void
+  submit: (values: Values) => Promise<any>
 }
 
 export type FormSubmitState = {
   disabled: boolean
-}
-
-export type FormSubmitActions = {
-  handleSubmit: (values: FormValues) => void
 }
