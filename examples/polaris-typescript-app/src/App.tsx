@@ -88,7 +88,7 @@ export default class App extends React.Component<Props, State> {
             </Layout.AnnotatedSection>
             <Layout.AnnotatedSection
               title="Powerfull state management"
-              description="Built on top of Formik, easily manage the state of your form"
+              description="Built on top of Polaris, easily manage the state of your form"
             >
               <SettingToggle
                 action={{
@@ -110,7 +110,7 @@ export default class App extends React.Component<Props, State> {
                     <FormConsumer>
                       {form => (
                         <TextStyle variation="subdued">
-                          {JSON.stringify(form)}
+                          {JSON.stringify(form, null, 2)}
                         </TextStyle>
                       )}
                     </FormConsumer>
@@ -164,7 +164,40 @@ export default class App extends React.Component<Props, State> {
                   <FormConsumer>
                     {form => (
                       <TextStyle variation="subdued">
-                        {JSON.stringify(form)}
+                        {JSON.stringify(form, null, 2)}
+                      </TextStyle>
+                    )}
+                  </FormConsumer>
+                </Form>
+              </Card>
+            </Layout.AnnotatedSection>
+            <Layout.AnnotatedSection
+              title="Hooks"
+              description="Compatible with new React Hooks"
+            >
+              <Card sectioned={true}>
+                <Form onSubmit={this.handleSubmit}>
+                  <TextField
+                    name="required"
+                    type="text"
+                    label="A required field"
+                    validation={{ isRequired }}
+                  />
+                  <TextField
+                    name="integer"
+                    label="A numeric field"
+                    validation={{ isInteger }}
+                  />
+                  <TextField
+                    name="requiredandinteger"
+                    label="A required and numeric field"
+                    validation={{ isRequired, isInteger }}
+                  />
+                  <SubmitButton>Submit</SubmitButton>
+                  <FormConsumer>
+                    {form => (
+                      <TextStyle variation="subdued">
+                        {JSON.stringify(form, null, 2)}
                       </TextStyle>
                     )}
                   </FormConsumer>

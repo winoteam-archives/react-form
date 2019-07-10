@@ -1,5 +1,19 @@
-import { rules, createValidationRule } from '@wino/form-validation'
+import { createValidationRule } from '@wino/form-validation'
 import { t } from './translation'
+
+const rules = {
+  isRequired(value: any): boolean {
+    return (
+      value !== '' &&
+      value !== undefined &&
+      value !== null &&
+      !(Array.isArray(value) && !value.length)
+    )
+  },
+  isInteger(value: any): boolean {
+    return value == parseInt(value, 10)
+  },
+}
 
 export const isRequired = createValidationRule(
   rules.isRequired,
