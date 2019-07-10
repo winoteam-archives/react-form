@@ -2,13 +2,12 @@
 
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
-**`react-form` provides tools to manage forms in React.js app. This library is based on [`formik`](https://github.com/jaredpalmer/formik/). It also provides ready-to-use components for use with [Polaris] UI kit(https://polaris.shopify.com).**
+**`react-form` provides tools to manage forms in React.js app. It also provides ready-to-use components for use with [Polaris] UI kit(https://polaris.shopify.com).**
 
 ## 🔥 Highlights
 
 * Declarative composability
 * Blazing fast
-* Build on top of [`formik`](https://github.com/jaredpalmer/formik/)
 * Validation and error messages management with i18n support
 * [Tested with Jest](https://jestjs.io/)
 * [Strictly-typed with Typescript](https://www.typescriptlang.org/)
