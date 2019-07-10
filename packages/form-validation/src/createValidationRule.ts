@@ -1,5 +1,5 @@
 export default function createValidationRule(
-  rule: Function,
+  rule: (value: any) => boolean,
   errorMessage: string,
 ) {
   return (value: any) => {
