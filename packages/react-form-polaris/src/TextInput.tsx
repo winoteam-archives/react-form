@@ -1,8 +1,12 @@
 import * as React from 'react'
-import { FormFieldState, FormFieldActions } from '@wino/react-form-core'
+import { FormFieldState, FormFieldHandlers } from '@wino/react-form-core'
 import { TextField, TextFieldProps } from '@shopify/polaris'
 
-type Props = TextFieldProps & FormFieldState<string | number> & FormFieldActions
+type FieldValue = string | number
+
+type Props = TextFieldProps &
+  FormFieldState<FieldValue> &
+  FormFieldHandlers<FieldValue>
 
 export type TextInputProps = Props
 
@@ -10,14 +14,13 @@ export default class TextInput extends React.Component<Props> {
   static defaultProps = { type: 'text' }
 
   handleChange = (value: string) => {
-    const { name, onChange } = this.props
-    const event = { target: { name, value } } as React.ChangeEvent<any>
-    return onChange(event)
+    const { onChange } = this.props
+    return onChange(value)
   }
 
-  handleBlur = (e?: FocusEvent) => {
+  handleBlur = () => {
     const { onBlur } = this.props
-    onBlur(e)
+    onBlur()
   }
 
   shouldComponentUpdate(nextProps: Props) {
@@ -31,7 +34,6 @@ export default class TextInput extends React.Component<Props> {
     return (
       <TextField
         {...this.props}
-        error={this.props.error}
         onChange={this.handleChange}
         onBlur={this.handleBlur}
       />

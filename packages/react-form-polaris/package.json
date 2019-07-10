@@ -17,7 +17,6 @@
   },
   "keywords": [
     "react",
-    "formik",
     "web",
     "form",
     "polaris"
@@ -32,6 +31,6 @@
   },
   "devDependencies": {
     "@types/async": "^2.0.50",
-    "typescript": "2.9.2"
+    "typescript": "^3.2.4"
   }
 }

@@ -1,16 +1,19 @@
 import * as React from 'react'
-import { FormFieldState, FormFieldActions } from '@wino/react-form-core'
+import { FormFieldState, FormFieldHandlers } from '@wino/react-form-core'
 import { Select, SelectProps } from '@shopify/polaris'
 
-type Props = SelectProps & FormFieldState<string | number> & FormFieldActions
+type FieldValue = string | number
+
+type Props = SelectProps &
+  FormFieldState<FieldValue> &
+  FormFieldHandlers<FieldValue>
 
 export type SelectInputProps = Props
 
 export default class SelectInput extends React.Component<Props> {
   handleChange = (value: string) => {
-    const { name, onChange } = this.props
-    const event = { target: { name, value } } as React.ChangeEvent<any>
-    return onChange(event)
+    const { onChange } = this.props
+    return onChange(value)
   }
 
   shouldComponentUpdate(nextProps: Props) {

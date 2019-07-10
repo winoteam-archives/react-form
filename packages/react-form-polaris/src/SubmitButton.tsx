@@ -10,12 +10,8 @@ export default function SubmitButton(props: Props) {
   const { children } = props
   return (
     <FormSubmit>
-      {({ handleSubmit, disabled }) => (
-        <Button
-          primary={!disabled}
-          outline={disabled}
-          onClick={handleSubmit as () => void}
-        >
+      {() => (
+        <Button primary={false} outline={true} onClick={() => void 0}>
           {children}
         </Button>
       )}
